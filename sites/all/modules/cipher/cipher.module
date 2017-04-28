@@ -41,9 +41,15 @@
   }
 
   function cipher_form_submit($form, &$form_state) {
+    $_SESSION['phrase'] = $form_state['values']['phrase'];
+    $_SESSION['value'] = $form_state['values']['value'];
+    $_SESSION['direction'] = $form_state['values']['direction'];
     $form_state['redirect'] = 'cipher_success';
   }
 
   function cipher_results() {
-    return '<p>Still Works!</p>';
+    $phrase = $_SESSION['phrase'];
+    $value = $_SESSION['value'];
+    $direction = $_SESSION['direction'];
+    return '<p>phrase is ' . $phrase . '</p><p>value is ' . $value . '</p><p>direction is ' . $direction;
   }
