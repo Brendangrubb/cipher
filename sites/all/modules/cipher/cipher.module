@@ -1,125 +1,128 @@
 <?php
+    // MENU AND FORM-STRUCTURE HOOKS
+    function cipher_menu() {
+        $items['cipher'] = array(
+            'title' => 'Cipher',
+            'page callback' => 'drupal_get_form',
+            'page arguments' => array('cipher_form'),
+            'access callback' => TRUE,
+            'type' => MENU_NORMAL_ITEM,
+        );
+        $items['cipher_success'] = array(
+            'title' => 'Your Results:',
+            'page callback' => 'cipher_results',
+            'access callback' => TRUE,
+            'type' => MENU_CALLBACK,
+        );
+        return $items;
+    };
 
-  function cipher_menu() {
-    $items['cipher'] = array(
-      'title' => 'Cipher',
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('cipher_form'),
-      'access callback' => TRUE,
-      'type' => MENU_NORMAL_ITEM,
-    );
-    $items['cipher_success'] = array(
-      'title' => 'Your Results:',
-      'page callback' => 'cipher_results',
-      'access callback' => TRUE,
-      'type' => MENU_CALLBACK,
-    );
-    return $items;
-  };
-
-  function cipher_form() {
-    $form['phrase'] = array(
-      '#title' => 'Phrase',
-      '#type' => 'textfield',
-      '#description' => t('Add a word or phrase you would like to encrypt'),
-      '#element_validate' => array('element_validate_phrase'),
-      '#required' => TRUE,
-    );
-    $form['value'] = array(
-      '#title' => 'Shift Value',
-      '#type' => 'textfield',
-      '#description' => t('How many spaces in the alphabet would you like each letter to shift?'),
-      '#element_validate' => array('element_validate_integer_positive'),
-      '#required' => TRUE,
-    );
-    $form['direction'] = array(
-      '#title' => 'Shift Direction',
-      '#type' => 'textfield',
-      '#description' => t('Which direction in the alphabet would you like each letter to shift?'),
-      '#element_validate' => array('element_validate_direction'),
-      '#required' => TRUE,
-    );
-    $form['submit'] = array(
-      '#type' => 'submit',
-      '#value' => 'Encrypt!',
-    );
-    return $form;
-  }
-
-  function element_validate_phrase($element) {
-    $temp = $element['#value'];
-    if ((float) $temp == TRUE) {
-        form_error($element, t("words only in the phrase field"));
+    function cipher_form() {
+        $form['phrase'] = array(
+            '#title' => 'Phrase',
+            '#type' => 'textfield',
+            '#description' => t('Add a word or phrase you would like to encrypt'),
+            '#element_validate' => array('element_validate_phrase'),
+            '#required' => TRUE,
+        );
+        $form['value'] = array(
+            '#title' => 'Shift Value',
+            '#type' => 'textfield',
+            '#description' => t('How many spaces in the alphabet would you like each letter to shift?'),
+            '#element_validate' => array('element_validate_integer_positive'),
+            '#required' => TRUE,
+        );
+        $form['direction'] = array(
+            '#title' => 'Shift Direction',
+            '#type' => 'textfield',
+            '#description' => t('Which direction in the alphabet would you like each letter to shift?'),
+            '#element_validate' => array('element_validate_direction'),
+            '#required' => TRUE,
+        );
+        $form['submit'] = array(
+            '#type' => 'submit',
+            '#value' => 'Encrypt!',
+        );
+        return $form;
     }
-  }
 
-  function element_validate_direction($element) {
-    $temp = $element['#value'];
-    if ($temp != 'left' && $temp != 'right') {
-      form_error($element, t("don't be silly, enter left or right please!"));
-    }
-  }
-
-  function cipher_form_submit($form, &$form_state) {
-    $phrase = $form_state['values']['phrase'];
-    $value = $form_state['values']['value'];
-    $direction = $form_state['values']['direction'];
-
-    $alpha_array = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
-    $backwards_array = array_reverse($alpha_array);
-    $ciphered_array = array();
-
-
-    $phrase_to_lower = strtolower($phrase);
-    $phrase_split = str_split($phrase_to_lower);
-
-    for ($i=0; $i < sizeof($phrase_split); $i++) {
-      if ($direction == 'right') {
-        if (in_array($phrase_split[$i], $alpha_array)) {
-          for ($x=0; $x < sizeof($alpha_array); $x++) {
-            if ($phrase_split[$i] == $alpha_array[$x]) {
-              array_push($ciphered_array, $alpha_array[$x + $value]);
-            }
-          }
-        } else {
-          array_push($ciphered_array, $phrase_split[$i]);
+    // FORM VALIDATION
+    function element_validate_phrase($element) {
+        $temp = $element['#value'];
+        if ((float) $temp == TRUE) {
+            form_error($element, t("words only in the phrase field"));
         }
-      } elseif ($direction == 'left') {
-        if (in_array($phrase_split[$i], $backwards_array)) {
-          for ($x=0; $x < sizeof($backwards_array); $x++) {
-            if ($phrase_split[$i] == $backwards_array[$x]) {
-              array_push($ciphered_array, $backwards_array[$x + $value]);
-            }
-          }
-        } else {
-          array_push($ciphered_array, $phrase_split[$i]);
-        }
-      }
     }
-    $ciphered_string = implode('', $ciphered_array);
 
+    function element_validate_direction($element) {
+        $temp = strtolower($element['#value']);
+        if ($temp != 'left' && $temp != 'right') {
+            form_error($element, t("don't be silly, enter left or right please!"));
+        }
+    }
 
-    // $_SESSION['var_test'] = $phrase_split;
+    // CIPHER FUNCTION
+    function cipher_form_submit($form, &$form_state) {
+        // GATHER INPUTS
+        $phrase = $form_state['values']['phrase'];
+        $value = $form_state['values']['value'];
+        $direction = $form_state['values']['direction'];
+        // ESTABLISH ARRAYS
+        $alpha_array = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+        $backwards_array = array_reverse($alpha_array);
+        $ciphered_array = array();
+        // PREPARE INPUT FOR COMPARISON
+        $phrase_to_lower = strtolower($phrase);
+        $phrase_split = str_split($phrase_to_lower);
+        // LOOP THROUGH INPUT PHRASE LETTER BY LETTER
+        for ($i=0; $i < sizeof($phrase_split); $i++) {
+            // DIRECTION INPUT = RIGHT (FORWARDS ALPHABET)
+            if (strtolower($direction) == 'right') {
+                // IF LETTER EXISTS IN ALPHABET
+                if (in_array($phrase_split[$i], $alpha_array)) {
+                    for ($x=0; $x < sizeof($alpha_array); $x++) {
+                        // WHERE LETTER EQUALS LETTER IN ALPHA ARRAY, SET EQUAL TO THAT LETTER'S INDEX + SHIFT VALUE INPUT AND PUSH INTO CIPHERED PHRASE ARRAY
+                        if ($phrase_split[$i] == $alpha_array[$x]) {
+                            array_push($ciphered_array, $alpha_array[$x + $value]);
+                        }
+                    }
+                // IF NOT A LETTER, JUST PUSH INTO CIPHERED PHRASE ARRAY
+                } else {
+                    array_push($ciphered_array, $phrase_split[$i]);
+                }
+                // DIRECTION INPUT = LEFT (BACKWARDS ALPHABET, THEN SAME AS ABOVE)
+            } elseif (strtolower($direction) == 'left') {
+                if (in_array($phrase_split[$i], $backwards_array)) {
+                    for ($x=0; $x < sizeof($backwards_array); $x++) {
+                        if ($phrase_split[$i] == $backwards_array[$x]) {
+                            array_push($ciphered_array, $backwards_array[$x + $value]);
+                        }
+                    }
+                } else {
+                    array_push($ciphered_array, $phrase_split[$i]);
+                }
+            }
+        }
+        // TURN CIPHERED PHRASE ARRAY INTO STRING
+        $ciphered_string = implode('', $ciphered_array);
+        // SEND OLD AND NEW VALUES TO RESULTS PAGE
+        $_SESSION['phrase'] = $phrase;
+        $_SESSION['value'] = $value;
+        $_SESSION['direction'] = $direction;
+        $_SESSION['output'] = $ciphered_string;
+        $form_state['redirect'] = 'cipher_success';
+    }
+    // RESULTS PAGE
+    function cipher_results() {
+        $phrase = $_SESSION['phrase'];
+        $value = $_SESSION['value'];
+        $direction = $_SESSION['direction'];
+        $output = $_SESSION['output'];
 
-    $_SESSION['phrase'] = $phrase;
-    $_SESSION['value'] = $value;
-    $_SESSION['direction'] = $direction;
-    $_SESSION['output'] = $ciphered_string;
-    $form_state['redirect'] = 'cipher_success';
-  }
-
-  function cipher_results() {
-    $phrase = $_SESSION['phrase'];
-    $value = $_SESSION['value'];
-    $direction = $_SESSION['direction'];
-    $output = $_SESSION['output'];
-
-    // $var_test = $_SESSION['var_test'];
-    // var_dump($var_test);
-    return
-      '<p>Your input phrase is <strong>' . $phrase .
-      '</strong>, the shift value you entered is <strong>' . $value .
-      '</strong> and the shift direction you entered is <strong>' . $direction .
-      '</strong>. Here is your encrypted phrase:<br>' . $output .
-      '</p>';
-  }
+        return
+            '<p>Your input phrase is <strong>' . $phrase .
+            '</strong>, the shift value you entered is <strong>' . $value .
+            '</strong> and the shift direction you entered is <strong>' . $direction .
+            '</strong>. Here is your encrypted phrase:<br>' . $output .
+            '</p>';
+    }
