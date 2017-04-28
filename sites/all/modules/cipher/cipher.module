@@ -3,12 +3,36 @@
   function cipher_menu() {
     $items['cipher'] = array(
       'title' => 'Cipher',
-      'page callback' => 'cipher',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('cipher_form'),
       'access callback' => TRUE,
       'type' => MENU_NORMAL_ITEM,
     );
     return $items;
   };
+
+  function cipher_form() {
+    $form['phrase'] = array(
+      '#title' => 'Phrase',
+      '#type' => 'textfield',
+      '#description' => t('Add a word or phrase you would like to encrypt'),
+    );
+    $form['value'] = array(
+      '#title' => 'Shift Value',
+      '#type' => 'textfield',
+      '#description' => t('How many spaces in the alphabet would you like each letter to shift?'),
+    );
+    $form['direction'] = array(
+      '#title' => 'Shift Direction',
+      '#type' => 'textfield',
+      '#description' => t('Which direction in the alphabet would you like each letter to shift?'),
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Encrypt!',
+    );
+    return $form;
+  }
 
   function cipher() {
     return '<p> Works! </p>';
