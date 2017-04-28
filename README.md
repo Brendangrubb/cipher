@@ -22,11 +22,11 @@
     * Click start servers.
 * Type **_localhost:8888/phpmyadmin_** into your web browser
     * Click the _Import_ tab on the nav bar
-    * Click _Choose File_ and navigate to **cipher.sql.zip_**
+    * Click _Choose File_ and navigate to **_cipher.sql.zip_**
     * Click _GO_
     * Click the _User Accounts_ tab on the nav bar
     * Click _Add user account_
-    * Enter cipher_ as username, _local_ as hostname and cipher_ as password
+    * Enter _cipher_ as username, _local_ as hostname and _cipher_ as password
     * Check all _Global privilages_ and click _Go_
 * Type **_localhost:8888_** into your web browser
 * The application will load and be ready to use!
@@ -35,11 +35,11 @@
 ## Specifications
 |Behavior|Input|Output|
 |--------|-----|------|
-| Program will convert input to all lowercase  | _value - 0_ // _direction - right_ // _phrase - "HeLlO"_| _"hello"_ |
-| Program will shift letters based on value  | _value - 1_ // _direction - right_ // _phrase - "HeLlO"_| _"ifmmp"_ |
-| Program will change letter shift path based on direction  | _value - 1_ // _direction - left // _phrase - "HeLlO"_ | _"gdkkn"_ |
-| Program will ignore punctuation and spaces  | _value - 1_ // _direction - left // _phrase - "HeLlO McFly!"_ | _"gdkkn lbekx!"_ |
-| Program will treat alphabet cyclically  | _value - 1_ // _direction - right // _phrase - "Pizza Party!"_ | _"qjaab qbsuz!"_ |
+| Program will convert input to all lowercase  | _value - 0_ &nbsp;\ \ &nbsp;_direction - right_ &nbsp;\ \ &nbsp;_phrase - "HeLlO"_ | _"hello"_ |
+| Program will shift letters based on value  | _value - 1_ &nbsp;\ \ &nbsp;_direction - right_ &nbsp;\ \ &nbsp;_phrase - "HeLlO"_ | _"ifmmp"_ |
+| Program will change letter shift path based on direction  | _value - 1_ &nbsp;\ \ &nbsp;_direction - left_ &nbsp;\ \ &nbsp;_phrase - "HeLlO"_ | _"gdkkn"_ |
+| Program will ignore punctuation and spaces  | _value - 1_ &nbsp;\ \ &nbsp;_direction - left_ &nbsp;\ \ &nbsp;_phrase - "HeLlO McFly!"_ | _"gdkkn lbekx!"_ |
+| Program will treat alphabet cyclically  | _value - 1_ &nbsp;\ \ &nbsp;_direction - right_ &nbsp;\ \ &nbsp;_phrase - "Pizza Party!"_ | _"qjaab qbsuz!"_ |
 
 
 &nbsp;
