@@ -22,16 +22,22 @@
       '#title' => 'Phrase',
       '#type' => 'textfield',
       '#description' => t('Add a word or phrase you would like to encrypt'),
+      '#element_validate' => array('element_validate_phrase'),
+      '#required' => TRUE,
     );
     $form['value'] = array(
       '#title' => 'Shift Value',
       '#type' => 'textfield',
       '#description' => t('How many spaces in the alphabet would you like each letter to shift?'),
+      '#element_validate' => array('element_validate_integer_positive'),
+      '#required' => TRUE,
     );
     $form['direction'] = array(
       '#title' => 'Shift Direction',
       '#type' => 'textfield',
       '#description' => t('Which direction in the alphabet would you like each letter to shift?'),
+      '#element_validate' => array('element_validate_direction'),
+      '#required' => TRUE,
     );
     $form['submit'] = array(
       '#type' => 'submit',
@@ -40,13 +46,27 @@
     return $form;
   }
 
+  function element_validate_phrase($element) {
+    $temp = $element['#value'];
+    if ((float) $temp == TRUE) {
+        form_error($element, t("words only in the phrase field"));
+    }
+  }
+
+  function element_validate_direction($element) {
+    $temp = $element['#value'];
+    if ($temp != 'left' && $temp != 'right') {
+      form_error($element, t("don't be silly, enter left or right please!"));
+    }
+  }
+
   function cipher_form_submit($form, &$form_state) {
     $phrase = $form_state['values']['phrase'];
     $value = $form_state['values']['value'];
     $direction = $form_state['values']['direction'];
 
     $alpha_array = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
-    $backwards_array = array('z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a');
+    $backwards_array = array_reverse($alpha_array);
     $ciphered_array = array();
 
 
