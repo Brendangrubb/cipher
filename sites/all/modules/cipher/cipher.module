@@ -129,9 +129,9 @@
         $output = $_SESSION['output'];
 
         return
-            '<p>Your input phrase is <strong>' . $phrase .
-            '</strong>, the shift value you entered is <strong>' . $value .
-            '</strong> and the shift direction you entered is <strong>' . $direction .
-            '</strong>. Here is your encrypted phrase:<br>' . $output .
-            '</p>';
+            '<p>Your input phrase was: ' . $phrase .
+            '</p><p>The shift value you entered was: ' . $value .
+            '</p><p>The shift direction you entered was: ' . $direction .
+            '</p><p>Here is your encrypted phrase:<br><strong>' . $output .
+            '</strong></p>';
     }
