@@ -1,0 +1,5 @@
+name = Cipher
+description = Encrypt a phrase using a customizable Caesar cipher
+package = Code Review modules
+core = 7.x
+files[] = cipher.module
