@@ -41,9 +41,37 @@
   }
 
   function cipher_form_submit($form, &$form_state) {
-    $_SESSION['phrase'] = $form_state['values']['phrase'];
-    $_SESSION['value'] = $form_state['values']['value'];
-    $_SESSION['direction'] = $form_state['values']['direction'];
+    $phrase = $form_state['values']['phrase'];
+    $value = $form_state['values']['value'];
+    $direction = $form_state['values']['direction'];
+
+    $alpha_array = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+    $ciphered_array = array();
+
+
+    $phrase_to_lower = strtolower($phrase);
+    $phrase_split = str_split($phrase_to_lower);
+
+    for ($i=0; $i < sizeof($phrase_split); $i++) {
+      if (in_array($phrase_split[$i], $alpha_array)) {
+        for ($x=0; $x < sizeof($alpha_array); $x++) {
+          if ($phrase_split[$i] == $alpha_array[$x]) {
+            array_push($ciphered_array, $alpha_array[$x + $value]);
+          }
+        }
+
+
+      }
+    }
+    $ciphered_string = implode('', $ciphered_array);
+
+
+    $_SESSION['var_test'] = $phrase_split;
+
+    $_SESSION['phrase'] = $phrase;
+    $_SESSION['value'] = $value;
+    $_SESSION['direction'] = $direction;
+    $_SESSION['output'] = $ciphered_string;
     $form_state['redirect'] = 'cipher_success';
   }
 
@@ -51,5 +79,14 @@
     $phrase = $_SESSION['phrase'];
     $value = $_SESSION['value'];
     $direction = $_SESSION['direction'];
-    return '<p>phrase is ' . $phrase . '</p><p>value is ' . $value . '</p><p>direction is ' . $direction;
+    $output = $_SESSION['output'];
+
+    $var_test = $_SESSION['var_test'];
+    var_dump($var_test);
+    return
+      '<p>Your input phrase is <strong>' . $phrase .
+      '</strong>, the shift value you entered is <strong>' . $value .
+      '</strong> and the shift direction you entered is <strong>' . $direction .
+      '</strong>. Here is your encrypted phrase:<br>' . $output .
+      '</p>';
   }
