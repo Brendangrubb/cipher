@@ -59,8 +59,8 @@
             array_push($ciphered_array, $alpha_array[$x + $value]);
           }
         }
-
-
+      } else {
+        array_push($ciphered_array, $phrase_split[$i]);
       }
     }
     $ciphered_string = implode('', $ciphered_array);
