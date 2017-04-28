@@ -29,7 +29,7 @@
             '#title' => 'Shift Value',
             '#type' => 'textfield',
             '#description' => t('How many spaces in the alphabet would you like each letter to shift?'),
-            '#element_validate' => array('element_validate_integer_positive'),
+            '#element_validate' => array('element_validate_integer_positive', 'element_validation_range'),
             '#required' => TRUE,
         );
         $form['direction'] = array(
@@ -50,7 +50,13 @@
     function element_validate_phrase($element) {
         $temp = $element['#value'];
         if ((float) $temp == TRUE) {
-            form_error($element, t("words only in the phrase field"));
+            form_error($element, t("come on now, words and punctuation only please."));
+        }
+    }
+    function element_validation_range($element) {
+        $temp = $element['#value'];
+        if ($temp > 26) {
+            form_error($element, t("please enter a number between 1 and 25...i suppose you could enter 26 but that wouldn't be a very complicated cipher, would it?"));
         }
     }
 
