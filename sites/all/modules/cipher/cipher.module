@@ -83,7 +83,12 @@
                     for ($x=0; $x < sizeof($alpha_array); $x++) {
                         // WHERE LETTER EQUALS LETTER IN ALPHA ARRAY, SET EQUAL TO THAT LETTER'S INDEX + SHIFT VALUE INPUT AND PUSH INTO CIPHERED PHRASE ARRAY
                         if ($phrase_split[$i] == $alpha_array[$x]) {
-                            array_push($ciphered_array, $alpha_array[$x + $value]);
+                            // IF ALPHA ARRAY INDEX + VALUE IS TRUE, PROCEED. IF NOT, SUBTRACT THE INDEX OF ALPHA ARRAY BY (26-SHIFT VALUE)
+                            if (isset($alpha_array[$x + $value])) {
+                                array_push($ciphered_array, $alpha_array[$x + $value]);
+                            } else {
+                                array_push($ciphered_array, $alpha_array[$x - (26-$value)]);
+                            }
                         }
                     }
                 // IF NOT A LETTER, JUST PUSH INTO CIPHERED PHRASE ARRAY
@@ -95,7 +100,11 @@
                 if (in_array($phrase_split[$i], $backwards_array)) {
                     for ($x=0; $x < sizeof($backwards_array); $x++) {
                         if ($phrase_split[$i] == $backwards_array[$x]) {
-                            array_push($ciphered_array, $backwards_array[$x + $value]);
+                            if (isset($alpha_array[$x + $value])) {
+                                array_push($ciphered_array, $backwards_array[$x + $value]);
+                            } else {
+                                array_push($ciphered_array, $backwards_array[$x - (26-$value)]);
+                            }
                         }
                     }
                 } else {
